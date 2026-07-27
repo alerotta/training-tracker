@@ -1,0 +1,11 @@
+[project]
+name = "training-tracker"
+version = "0.1.0"
+description = "Training tracker application."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "matplotlib>=3.11.1",
+    "pandas>=3.0.5",
+    "pyside6>=6.11.1",
+]
