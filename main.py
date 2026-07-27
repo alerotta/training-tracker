@@ -6,6 +6,8 @@ from PySide6.QtWidgets import (
     QMainWindow,
 )
 
+from src.database import *
+
 class MainWindow(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
@@ -17,6 +19,7 @@ class MainWindow(QMainWindow):
 
 
 def main() -> int:
+    initialize_database()
     application = QApplication(sys.argv)
     window = MainWindow()
     window.show()
