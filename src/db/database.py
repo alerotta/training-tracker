@@ -1,7 +1,7 @@
 import sqlite3
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 DATA_DIRECTORY = PROJECT_ROOT / "data"
 DATABASE_PATH = DATA_DIRECTORY / "training_tracker.db"
 
@@ -66,3 +66,36 @@ def initialize_database() -> None:
         )
     finally:
         connection.close
+
+def create_activity(name: str) -> int:
+    with get_connection() as connection:
+        cursor = connection.execute(
+            """
+            INSERT INTO activities (name)
+            VALUES (?)
+            """,
+            (name,),
+        )
+
+        activity_id = cursor.lastrowid
+
+        if activity_id is None:
+            raise RuntimeError(
+                "The activity was not created correctly."
+            )
+
+        return activity_id
+
+def get_all_activities() -> list[sqlite3.Row]:
+    with get_connection() as connection:
+        cursor = connection.execute(
+            """
+            SELECT id, name
+            FROM activities
+            ORDER BY name
+            """
+        )
+
+        activities = cursor.fetchall()
+
+    return activities
