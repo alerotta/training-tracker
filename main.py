@@ -1,12 +1,13 @@
 import sys
 from src.db.database import initialize_database
-from src.controllers.controller import Controller
+from src.main_window import MainWindow
 from PySide6.QtWidgets import QApplication
 
 def main() -> int:
     initialize_database()
     application = QApplication(sys.argv)
-    controller = Controller()
+    main_window = MainWindow()
+    main_window.show()
     return application.exec()
 
 

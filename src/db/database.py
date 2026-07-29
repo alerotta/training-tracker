@@ -96,6 +96,9 @@ def get_all_activities() -> list[sqlite3.Row]:
             """
         )
 
-        activities = cursor.fetchall()
+        rows = cursor.fetchall()
 
-    return activities
+    return [
+        (row["id"], row["name"])
+        for row in rows
+    ]

@@ -1,0 +1,31 @@
+from PySide6.QtCore import Signal
+from PySide6.QtWidgets import (
+    QWidget,
+    QPushButton,
+    QVBoxLayout
+)
+from src.ui.pages.activity.components.activity_container import ActivityContainer
+
+class ActivityDefaultView (QWidget):
+
+    activity_form_request = Signal()
+
+    def __init__(self, activities: list[tuple[int,str]]):
+        super().__init__()
+
+        # create own layout
+        self.main_layout = QVBoxLayout(self)
+
+        # create components
+        add_button = QPushButton("New Actitivty")
+        add_button.clicked.connect(
+            self.activity_form_request.emit
+        )
+        activity_container = ActivityContainer(activities)
+
+        # add components to layout
+        self.main_layout.addWidget(add_button)
+        self.main_layout.addWidget(activity_container)
+
+
+        
