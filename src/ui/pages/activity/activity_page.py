@@ -15,6 +15,7 @@ and the form view, this class in responsible to define how to switch between vie
 class ActivityPage (QWidget) :
 
     activity_add_request = Signal(str)
+    view_activity_sessions_request = Signal(int)
 
     def __init__(self, activities: list[tuple[int,str]]) -> None:
         super().__init__()
@@ -35,17 +36,24 @@ class ActivityPage (QWidget) :
 
     def reload_activities (self,activities: list[tuple[int,str]]) -> None:
         self.activity_default_view.activity_container.reload_activities(activities)
+        self.show_activity_default_view()
         return
     
 
     def _connect_signlas (self) -> None : 
 
-        # signals from default view
+        ### signals from default view ###
+        
         self.activity_default_view.activity_form_request.connect(
             self.show_activity_form_view
         )
 
-        # signals from from view
+        self.activity_default_view.view_activity_sessions_request.connect(
+            self.view_activity_sessions_request.emit
+        )
+
+        ### signals from from view ###
+
         self.activity_form_view.activity_default_view_request.connect(
             self.show_activity_default_view
         )
@@ -53,6 +61,7 @@ class ActivityPage (QWidget) :
         self.activity_form_view.activity_add_request.connect(
             self.activity_add_request.emit
         )
+
 
     def show_activity_default_view(self):
         self.stack_layout.setCurrentWidget(self.activity_default_view)

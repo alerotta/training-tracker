@@ -20,7 +20,9 @@ def initialize_database() -> None:
             """
             CREATE TABLE IF NOT EXISTS activities (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL
+                name TEXT NOT NULL,
+
+                UNIQUE (name)
             );
 
             CREATE TABLE IF NOT EXISTS sessions (
@@ -68,6 +70,7 @@ def initialize_database() -> None:
         connection.close
 
 def create_activity(name: str) -> int:
+    
     with get_connection() as connection:
         cursor = connection.execute(
             """
@@ -86,6 +89,28 @@ def create_activity(name: str) -> int:
 
         return activity_id
 
+def create_session(activity_id: int, session_date: str) -> int:
+    with get_connection() as connection:
+        cursor = connection.execute(
+            """
+            INSERT INTO sessions (activity_id, session_date)
+            VALUES (?, ?)
+            """,
+            (
+                activity_id,
+                session_date,
+            ),
+        )
+
+        session_id = cursor.lastrowid
+
+        if session_id is None:
+            raise RuntimeError(
+                "The session was not created correctly."
+            )
+
+        return session_id
+
 def get_all_activities() -> list[sqlite3.Row]:
     with get_connection() as connection:
         cursor = connection.execute(
@@ -100,5 +125,37 @@ def get_all_activities() -> list[sqlite3.Row]:
 
     return [
         (row["id"], row["name"])
+        for row in rows
+    ]
+
+def get_activity_name(activity_id: int) -> str:
+    with get_connection() as connection:
+        cursor = connection.execute(
+            "SELECT name FROM activities WHERE id = ?",
+            (activity_id,),
+        )
+        row = cursor.fetchone()
+
+        if row is None:
+            raise ValueError(f"Activity with ID {activity_id} not found")
+
+        return row[0]
+
+def get_all_sessions(activity_id: int) -> list[tuple[int, str]]:
+    with get_connection() as connection:
+        cursor = connection.execute(
+            """
+            SELECT id, session_date
+            FROM sessions
+            WHERE activity_id = ?
+            ORDER BY session_date
+            """,
+            (activity_id,),
+        )
+
+        rows = cursor.fetchall()
+
+    return [
+        (row["id"], row["session_date"])
         for row in rows
     ]

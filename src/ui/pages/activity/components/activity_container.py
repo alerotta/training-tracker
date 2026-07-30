@@ -12,6 +12,8 @@ activities common to all activity widgets, such as creation and init.
 
 class ActivityContainer (QWidget):
 
+    view_activity_sessions_request = Signal(int)
+    
     def __init__(self, activities: list[tuple[int,str]]):
         super().__init__()
 
@@ -25,6 +27,9 @@ class ActivityContainer (QWidget):
     def add_activity(self,activiity: tuple[int,str] ,  session_number: int = 0) -> None:
 
         activity_widget = ActivityWidget(activiity,session_number)
+        activity_widget.view_activity_sessions_request.connect(
+            self.view_activity_sessions_request.emit
+        )
         self.main_layout.addWidget(activity_widget)
 
     def reload_activities (self, activities: list[tuple[int,str]]) -> None :

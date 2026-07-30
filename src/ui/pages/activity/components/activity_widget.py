@@ -13,7 +13,7 @@ current nuber of sessions, when clicked the session page should be displayed.
 class ActivityWidget(QPushButton):
 
     # signal definition
-    view_activity_request = Signal(int)
+    view_activity_sessions_request = Signal(int)
 
     def __init__(self, activiity: tuple[int,str] ,  session_number: int  = 0) -> None:
 
@@ -38,4 +38,4 @@ class ActivityWidget(QPushButton):
 
     # function to emit the signal
     def _emit_signal(self):
-        self.view_activity_request.emit(self.activity_id) 
+        self.view_activity_sessions_request.emit(self.activity_id) 

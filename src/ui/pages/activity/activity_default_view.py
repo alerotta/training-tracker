@@ -9,6 +9,7 @@ from src.ui.pages.activity.components.activity_container import ActivityContaine
 class ActivityDefaultView (QWidget):
 
     activity_form_request = Signal()
+    view_activity_sessions_request = Signal(int)
     activity_container : ActivityContainer
 
     def __init__(self, activities: list[tuple[int,str]]):
@@ -27,3 +28,7 @@ class ActivityDefaultView (QWidget):
         # add components to layout
         self.main_layout.addWidget(add_button)
         self.main_layout.addWidget(self.activity_container)
+
+        self.activity_container.view_activity_sessions_request.connect(
+            self.view_activity_sessions_request.emit
+        )
