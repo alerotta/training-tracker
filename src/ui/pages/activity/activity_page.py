@@ -1,4 +1,4 @@
-
+from PySide6.QtCore import Signal
 from PySide6.QtWidgets import (
     QWidget,
     QStackedLayout
@@ -14,6 +14,7 @@ and the form view, this class in responsible to define how to switch between vie
 
 class ActivityPage (QWidget) :
 
+    activity_add_request = Signal(str)
 
     def __init__(self, activities: list[tuple[int,str]]) -> None:
         super().__init__()
@@ -32,14 +33,25 @@ class ActivityPage (QWidget) :
         # connect signals
         self._connect_signlas()
 
+    def reload_activities (self,activities: list[tuple[int,str]]) -> None:
+        self.activity_default_view.activity_container.reload_activities(activities)
+        return
+    
+
     def _connect_signlas (self) -> None : 
 
+        # signals from default view
         self.activity_default_view.activity_form_request.connect(
             self.show_activity_form_view
         )
 
-        self.activity_form_view.activity_default_request.connect(
+        # signals from from view
+        self.activity_form_view.activity_default_view_request.connect(
             self.show_activity_default_view
+        )
+
+        self.activity_form_view.activity_add_request.connect(
+            self.activity_add_request.emit
         )
 
     def show_activity_default_view(self):
@@ -47,3 +59,4 @@ class ActivityPage (QWidget) :
 
     def show_activity_form_view(self):
         self.stack_layout.setCurrentWidget(self.activity_form_view)
+

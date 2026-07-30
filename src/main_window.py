@@ -1,4 +1,4 @@
-from src.db.database import get_all_activities
+from src.db.database import get_all_activities, create_activity
 from PySide6.QtWidgets import (
     QMainWindow,
     QStackedWidget,
@@ -31,9 +31,25 @@ class MainWindow(QMainWindow):
         
         self.page_stack.addWidget(self.activity_page)
       
-
         # set the contral widget and show the window
         self.setCentralWidget(self.page_stack)
+
+        self._connect_signals()
+
+    #connect received signals to class methods
+    def _connect_signals (self) -> None:
+        self.activity_page.activity_add_request.connect(
+            self.add_activity_to_database
+        )
+
+    def add_activity_to_database(self,txt: str):
+        create_activity(txt)
+
+        #refetch and reload activities
+        activities = get_all_activities()
+        self.activity_page.reload_activities(activities)
+        
+
 
     
 

@@ -26,3 +26,16 @@ class ActivityContainer (QWidget):
 
         activity_widget = ActivityWidget(activiity,session_number)
         self.main_layout.addWidget(activity_widget)
+
+    def reload_activities (self, activities: list[tuple[int,str]]) -> None :
+
+        #clear all widgets
+        while self.main_layout.count() > 0:
+            item = self.main_layout.takeAt(0)
+            widget = item.widget()
+            if widget is not None:
+                widget.deleteLater()
+
+        #re instance
+        for activity in activities:
+            self.add_activity(activity)
