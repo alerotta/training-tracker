@@ -1,14 +1,11 @@
 import sqlite3
-from pathlib import Path
+from src.app_paths import get_database_path
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-DATA_DIRECTORY = PROJECT_ROOT / "data"
-DATABASE_PATH = DATA_DIRECTORY / "training_tracker.db"
+
 
 def get_connection() -> sqlite3.Connection:
-    DATA_DIRECTORY.mkdir(parents=True, exist_ok=True)
-
-    connection = sqlite3.connect(DATABASE_PATH)
+    
+    connection = sqlite3.connect(get_database_path())
     connection.row_factory = sqlite3.Row
     connection.execute("PRAGMA foreign_keys = ON")
     return connection

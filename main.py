@@ -4,10 +4,15 @@ from src.main_window import MainWindow
 from PySide6.QtWidgets import QApplication
 
 def main() -> int:
-    initialize_database()
     application = QApplication(sys.argv)
+    application.setApplicationName("Training Tracker")
+    application.setOrganizationName("Training Tracker")
+
+    initialize_database()
+
     main_window = MainWindow()
     main_window.show()
+
     return application.exec()
 
 
