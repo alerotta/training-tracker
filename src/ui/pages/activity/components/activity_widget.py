@@ -62,7 +62,7 @@ class ActivityWidget(QPushButton):
             ActivityWidget {
                 background-color: #f3f3f3;
                 border: 1px solid #dddddd;
-                border-radius: 20px;
+                border-radius: 8px;
                 text-align: left;
             }
 
