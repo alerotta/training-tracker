@@ -51,14 +51,15 @@ class MainWindow(QMainWindow):
         #refetch and reload activities
         activities = get_all_activities()
         self.activity_page.reload_activities(activities)
+        return
 
     def add_session_to_database(self, date: str) -> None:
         # create in database new row
         create_session(self.current_activity_id,date)
+
+        #refetch and reload activities
         sessions = get_all_sessions(self.current_activity_id)
-
-        ###### TODO: refresh the sessions
-
+        self.sessions_page.reload_sessions(sessions)
         return
         
 
@@ -68,9 +69,10 @@ class MainWindow(QMainWindow):
     def show_session_page(self,activity_id:int):
 
         self.current_activity_id = activity_id
+        self.current_activity_name = get_activity_name(activity_id)
+
         sessions = get_all_sessions(activity_id)
-        activity_name = get_activity_name(activity_id)
-        self.sessions_page = SessionPage(activity_name,sessions )
+        self.sessions_page = SessionPage(self.current_activity_name,sessions )
         self._connect_signals_session_page ()
         self.page_stack.addWidget(self.sessions_page)
         self.page_stack.setCurrentWidget(self.sessions_page)

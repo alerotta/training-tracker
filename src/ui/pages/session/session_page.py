@@ -27,6 +27,10 @@ class SessionPage (QWidget) :
 
         self._connect_signlas()
 
+    def reload_sessions (self,sessions: list[tuple[int, str]]):
+        self.session_default_view.session_container.reload_sessions(sessions)
+        self.show_session_default_view()
+
 
     def _connect_signlas (self) -> None : 
 

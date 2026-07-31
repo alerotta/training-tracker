@@ -11,6 +11,7 @@ class SessionDefaultView (QWidget):
 
     session_form_view_request = Signal()
     activity_page_request = Signal()
+    session_container = SessionContainer
 
     def __init__(self, activity_name: str, sessions: list[tuple[int,str]]) -> None:
         super().__init__()
@@ -18,7 +19,7 @@ class SessionDefaultView (QWidget):
         self.main_layout = QVBoxLayout(self)
 
         title_label = QLabel(activity_name)
-        session_container = SessionContainer(sessions)
+        self.session_container = SessionContainer(sessions)
 
         add_button = QPushButton("Add New Session")
         add_button.clicked.connect(
@@ -31,7 +32,7 @@ class SessionDefaultView (QWidget):
         )
 
         self.main_layout.addWidget(title_label)
-        self.main_layout.addWidget(session_container)
+        self.main_layout.addWidget(self.session_container)
         self.main_layout.addWidget(add_button)
         self.main_layout.addWidget(back_button)
         
